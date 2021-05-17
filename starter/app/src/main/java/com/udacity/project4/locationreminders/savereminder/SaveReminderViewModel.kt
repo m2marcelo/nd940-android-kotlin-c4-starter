@@ -1,7 +1,9 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
@@ -12,14 +14,27 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import kotlinx.coroutines.launch
 
-class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
+class SaveReminderViewModel(val app: Application, private val dataSource: ReminderDataSource) :
     BaseViewModel(app) {
     val reminderTitle = MutableLiveData<String>()
     val reminderDescription = MutableLiveData<String>()
-    val reminderSelectedLocationStr = MutableLiveData<String>()
-    val selectedPOI = MutableLiveData<PointOfInterest>()
-    val latitude = MutableLiveData<Double>()
-    val longitude = MutableLiveData<Double>()
+
+    private val _selectedPlaceOfInterest = MutableLiveData<PointOfInterest>()
+
+    val selectedPlaceOfInterest: LiveData<PointOfInterest>
+        get() = _selectedPlaceOfInterest
+
+    val selectedPlaceOfInterestName = Transformations.map(_selectedPlaceOfInterest) {
+        if (it == null) {
+            return@map ""
+        }
+
+        if (it.name.isNullOrBlank()) {
+            return@map "Lat: ${it.latLng.latitude} Lon: ${it.latLng.longitude}"
+        }
+
+        it.name
+    }
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -27,10 +42,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     fun onClear() {
         reminderTitle.value = null
         reminderDescription.value = null
-        reminderSelectedLocationStr.value = null
-        selectedPOI.value = null
-        latitude.value = null
-        longitude.value = null
+        _selectedPlaceOfInterest.value = null
     }
 
     /**
@@ -45,7 +57,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Save the reminder to the data source
      */
-    fun saveReminder(reminderData: ReminderDataItem) {
+    private fun saveReminder(reminderData: ReminderDataItem) {
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(
@@ -67,7 +79,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
-    fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
+    private fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
         if (reminderData.title.isNullOrEmpty()) {
             showSnackBarInt.value = R.string.err_enter_title
             return false
@@ -78,5 +90,9 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
             return false
         }
         return true
+    }
+
+    fun setSelectedLocation(placeOfInterest: PointOfInterest) {
+        _selectedPlaceOfInterest.postValue(placeOfInterest)
     }
 }

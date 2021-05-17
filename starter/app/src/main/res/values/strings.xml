@@ -42,4 +42,6 @@
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
     <string name="login_register">Login or Register</string>
     <string name="logout_failed">Error when logging out...</string>
+    <string name="map_fragment">map_fragment</string>
+    <string name="save_location">Save this location</string>
 </resources>

@@ -5,39 +5,32 @@
     tools:context=".locationreminders.savereminder.selectreminderlocation.SelectLocationFragment">
 
     <data>
-
         <variable
-            name="viewModel"
-            type="com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel" />
+            name="onSaveButtonClicked"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--TODO: Add the map fragment for the user to select the location-->
 
-        <fragment
-            android:id="@+id/map_fragment"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="557dp"
-            app:layout_constraintBottom_toTopOf="@+id/save_location"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:tag="@string/map_fragment"/>
 
-        <Button
-            android:id="@+id/save_location"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@color/colorAccent"
-            android:text="@string/save"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/save_location"
+            android:onClick="@{onSaveButtonClicked}"
+            android:src="@drawable/ic_save"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/map_fragment" />
-
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
