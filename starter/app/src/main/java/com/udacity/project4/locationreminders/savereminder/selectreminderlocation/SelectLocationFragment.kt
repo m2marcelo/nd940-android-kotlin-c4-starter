@@ -1,5 +1,6 @@
 package com.udacity.project4.locationreminders.savereminder.selectreminderlocation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -90,6 +91,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             .title(getString(R.string.dropped_pin))
             .draggable(true)
 
+        map.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                requireContext(),
+                R.raw.map_style
+            )
+        )
+
         selectedLocationMarker = map.addMarker(markerOptions)
 
         baseViewModel.selectedPlaceOfInterest.value.let {
@@ -125,6 +133,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun startAtCurrentLocation() {
         if (!LocationUtils.hasLocationPermissions()) {
             LocationUtils.requestPermissions {
@@ -134,11 +143,22 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             return
         }
 
-        LocationUtils.requestSingleUpdate {
-            selectedLocationMarker.position = it.toLatLng()
-            placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
-            putCameraOn(selectedLocationMarker.position)
+        fun resetToCurrentLocation() =
+            LocationUtils.requestSingleUpdate {
+                selectedLocationMarker.position = it.toLatLng()
+                placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
+
+                putCameraOn(selectedLocationMarker.position)
+            }
+
+        map.isMyLocationEnabled = true
+
+        map.setOnMyLocationButtonClickListener {
+            resetToCurrentLocation()
+            true
         }
+
+        resetToCurrentLocation()
     }
 
     private fun putCameraOn(latLng: LatLng) {

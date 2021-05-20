@@ -1,18 +1,26 @@
 package com.udacity.project4.utils
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.observe
+import com.google.android.gms.maps.model.LatLng
 import org.koin.core.context.GlobalContext
 import java.util.*
+import java.util.concurrent.Executors
 
-open class PermissionHandler : Fragment() {
+open class PermissionHandler : Fragment()  {
     companion object {
         private val requestsList: Queue<PermissionRequest> = LinkedList()
         private val newRequest = MutableLiveData<Unit>()
@@ -32,9 +40,16 @@ open class PermissionHandler : Fragment() {
             val context = GlobalContext.getOrNull()?.koin?.get<Application>() ?: return false
             ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
+
+        private const val PROVIDER = LocationManager.GPS_PROVIDER
     }
 
     private var currentRequest: PermissionRequest? = null
+
+    private val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onActivityCreated(savedInstanceState: Bundle?) {

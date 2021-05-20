@@ -44,4 +44,5 @@
     <string name="logout_failed">Error when logging out...</string>
     <string name="map_fragment">map_fragment</string>
     <string name="save_location">Save this location</string>
+    <string name="save_the_location">Save the location</string>
 </resources>

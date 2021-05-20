@@ -2,6 +2,7 @@ package com.udacity.project4.authentication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthMethodPickerLayout
@@ -68,10 +69,13 @@ class AuthenticationActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode != Actions.SIGN_IN) {
+            Log.d("VAI", "LOGIN ERROR")
             return
         }
 
         if (resultCode == RESULT_OK) {
+            Log.d("VAI", "LOGIN OK")
+
             navigateToRemindersActivity()
             return
         }

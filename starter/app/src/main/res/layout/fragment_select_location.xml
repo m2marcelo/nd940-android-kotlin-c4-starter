@@ -8,6 +8,9 @@
         <variable
             name="onSaveButtonClicked"
             type="android.view.View.OnClickListener" />
+        <variable
+            name="viewModel"
+            type="com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,9 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:contentDescription="@string/save_location"
+            android:contentDescription="@string/save_the_location"
             android:onClick="@{onSaveButtonClicked}"
-            android:src="@drawable/ic_save"
+            android:text="@string/save_the_location"
+            android:textColor="@color/design_default_color_on_primary"
+            app:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/ic_save"
+            app:iconTint="@color/design_default_color_on_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
