@@ -5,4 +5,11 @@
     <color name="colorAccent">#D81B60</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+
+    <color name="colorSecondary">#f9a825</color>
+    <color name="colorSecondaryDark">#c17900</color>
+
+    <color name="slider_layout_background">#CC555555</color>
+    <color name="map_radius_fill_color">#66F44336</color>
+    <color name="map_radius_stroke_color">#F44336</color>
 </resources>
