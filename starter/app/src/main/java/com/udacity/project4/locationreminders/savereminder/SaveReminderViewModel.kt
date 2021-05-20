@@ -26,14 +26,14 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
 
     val selectedPlaceOfInterestName = Transformations.map(_selectedPlaceOfInterest) {
         if (it == null) {
-            return@map ""
+            return@map app.getString(R.string.select_location)
         }
 
         if (it.name.isNullOrBlank()) {
             return@map "Lat: ${it.latLng.latitude} Lon: ${it.latLng.longitude}"
         }
 
-        it.name
+        it.name.replace("\n", "").trim()
     }
 
     /**

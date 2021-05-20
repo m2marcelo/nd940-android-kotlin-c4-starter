@@ -45,4 +45,5 @@
     <string name="map_fragment">map_fragment</string>
     <string name="save_location">Save this location</string>
     <string name="save_the_location">Save the location</string>
+    <string name="save_reminder">Save this reminder</string>
 </resources>
