@@ -162,39 +162,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         })
 
         map.isMyLocationEnabled = true
-
-//        selectedLocationMarker.position = it.toLatLng()
-//      placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
-
     }
 
-//    @SuppressLint("MissingPermission")
-//    private fun startAtCurrentLocation() {
-//        if (!LocationUtils.hasLocationPermissions()) {
-//            LocationUtils.requestPermissions {
-//                locationPermissionHandler(it, this::startAtCurrentLocation)
-//            }
-//
-//            return
-//        }
-//
-//        fun resetToCurrentLocation() =
-//            LocationUtils.requestSingleUpdate {
-//                selectedLocationMarker.position = it.toLatLng()
-//                placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
-//
-//                putCameraOn(selectedLocationMarker.position)
-//            }
-//
-//        map.isMyLocationEnabled = true
-//
-//        map.setOnMyLocationButtonClickListener {
-//            resetToCurrentLocation()
-//            true
-//        }
-//
-//        resetToCurrentLocation()
-//    }
 
     private fun putCameraOn(latLng: LatLng) {
         val cameraPosition = CameraPosition.fromLatLngZoom(latLng, 18f)

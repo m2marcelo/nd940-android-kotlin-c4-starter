@@ -27,8 +27,6 @@ class LocationHelper {
     }
 
     fun startListeningUserLocation(context: Context, myListener: MyLocationListener) {
-        Log.d("Location","CHAMANDO O HELPER")
-
         myLocationListener = myListener
 
         val mLocationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
@@ -54,7 +52,7 @@ class LocationHelper {
             if (ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(context as Activity,Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 // permission is denied by user, you can show your alert dialog here to send user to App settings to enable permission
             } else {
-                ActivityCompat.requestPermissions(context,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),MY_PERMISSIONS_REQUEST_LOCATION)
+                ActivityCompat.requestPermissions(context,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,  Manifest.permission.ACCESS_BACKGROUND_LOCATION),MY_PERMISSIONS_REQUEST_LOCATION)
             }
         }
     }
