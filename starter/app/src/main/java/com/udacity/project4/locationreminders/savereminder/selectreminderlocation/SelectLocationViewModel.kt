@@ -12,6 +12,8 @@ class SelectLocationViewModel : ViewModel() {
     private val _isRadiusSelectorOpen = MutableLiveData(false)
     private val _selectedLocation = MutableLiveData<PointOfInterest>()
 
+    var zoomValue = 15.5f
+
     val isRadiusSelectorOpen: LiveData<Boolean>
         get() = _isRadiusSelectorOpen
 

@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.slider.Slider
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -45,6 +46,15 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         binding.lifecycleOwner = this
         binding.onSaveButtonClicked = View.OnClickListener { onLocationSelected() }
         binding.viewModel = selectLocationViewModel
+
+        binding.radiusSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+            }
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                selectLocationViewModel.closeRadiusSelector()
+            }
+        })
 
         thiscontext = container!!.context
 
@@ -85,11 +95,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //        TODO: When the user confirms on the selected location,
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
+        selectLocationViewModel.closeRadiusSelector()
         baseViewModel.setSelectedLocation(selectLocationViewModel.selectedLocation.value!!)
         baseViewModel.setSelectedRadius(selectLocationViewModel.radius.value!!)
         baseViewModel.navigationCommand.postValue(NavigationCommand.Back)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        selectLocationViewModel.closeRadiusSelector()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
@@ -166,6 +181,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 selectLocationViewModel.setSelectedLocation(it)
             }
         }
+
+        map.setOnCameraMoveListener {
+            selectLocationViewModel.zoomValue = map.cameraPosition.zoom
+        }
     }
 
     private fun locationPermissionHandler(event: PermissionsResultEvent, handler: () -> Unit) {
@@ -179,15 +198,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    /*
-    *
-    * LocationHelper().startListeningUserLocation(this , object : LocationHelper.MyLocationListener {
-            override fun onLocationChanged(location: Location) {
-                // Here you got user location :)
-                Log.d("Location","" + location.latitude + "," + location.longitude)
-            }
-        })
-    * */
     @SuppressLint("MissingPermission")
     private fun startAtCurrentLocation() {
         LocationHelper().startListeningUserLocation( thiscontext, object : LocationHelper.MyLocationListener {
@@ -197,12 +207,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             }
         })
 
+        selectLocationViewModel.closeRadiusSelector()
         map.isMyLocationEnabled = true
     }
 
 
     private fun putCameraOn(latLng: LatLng) {
-        val cameraPosition = CameraPosition.fromLatLngZoom(latLng, 18f)
+        val cameraPosition = CameraPosition.fromLatLngZoom(latLng, selectLocationViewModel.zoomValue)
         val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
 
         map.animateCamera(cameraUpdate)
