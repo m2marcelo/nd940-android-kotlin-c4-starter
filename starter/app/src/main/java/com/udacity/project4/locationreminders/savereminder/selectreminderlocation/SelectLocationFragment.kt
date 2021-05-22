@@ -1,7 +1,10 @@
 package com.udacity.project4.locationreminders.savereminder.selectreminderlocation
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -14,10 +17,7 @@ import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
-import com.udacity.project4.utils.LocationUtils
-import com.udacity.project4.utils.PermissionsResultEvent
-import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-import com.udacity.project4.utils.toLatLng
+import com.udacity.project4.utils.*
 import org.koin.android.ext.android.inject
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
@@ -28,6 +28,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var selectedLocationMarker: Marker
     private lateinit var placeOfInterest: PointOfInterest
 
+    lateinit var thiscontext: Context
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -37,6 +39,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         binding.lifecycleOwner = this
         binding.onSaveButtonClicked = View.OnClickListener { onLocationSelected() }
+
+        thiscontext = container!!.context
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
@@ -105,11 +109,17 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
             if (it == null) {
                 startAtCurrentLocation()
+                Log.d("LOCATION", "CHAMANDO O STARTATCURRENTLOCATION")
             } else {
+                Log.d("Location","TO NO ELSE " + it.latLng.latitude + "," + it.latLng.longitude)
                 selectedLocationMarker.position = it.latLng
                 putCameraOn(it.latLng)
             }
+
+            Log.d("Location","depois do primeiro if " + it?.latLng?.latitude + "," + it?.latLng?.longitude)
         }
+
+
 
         map.setOnMapClickListener {
             selectedLocationMarker.position = it
@@ -133,36 +143,61 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    /*
+    *
+    * LocationHelper().startListeningUserLocation(this , object : LocationHelper.MyLocationListener {
+            override fun onLocationChanged(location: Location) {
+                // Here you got user location :)
+                Log.d("Location","" + location.latitude + "," + location.longitude)
+            }
+        })
+    * */
     @SuppressLint("MissingPermission")
     private fun startAtCurrentLocation() {
-        if (!LocationUtils.hasLocationPermissions()) {
-            LocationUtils.requestPermissions {
-                locationPermissionHandler(it, this::startAtCurrentLocation)
+        LocationHelper().startListeningUserLocation( thiscontext, object : LocationHelper.MyLocationListener {
+            override fun onLocationChanged(location: Location) {
+                // Here you got user location :)
+                Log.d("Location","" + location.latitude + "," + location.longitude)
             }
-
-            return
-        }
-
-        fun resetToCurrentLocation() =
-            LocationUtils.requestSingleUpdate {
-                selectedLocationMarker.position = it.toLatLng()
-                placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
-
-                putCameraOn(selectedLocationMarker.position)
-            }
+        })
 
         map.isMyLocationEnabled = true
 
-        map.setOnMyLocationButtonClickListener {
-            resetToCurrentLocation()
-            true
-        }
+//        selectedLocationMarker.position = it.toLatLng()
+//      placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
 
-        resetToCurrentLocation()
     }
 
+//    @SuppressLint("MissingPermission")
+//    private fun startAtCurrentLocation() {
+//        if (!LocationUtils.hasLocationPermissions()) {
+//            LocationUtils.requestPermissions {
+//                locationPermissionHandler(it, this::startAtCurrentLocation)
+//            }
+//
+//            return
+//        }
+//
+//        fun resetToCurrentLocation() =
+//            LocationUtils.requestSingleUpdate {
+//                selectedLocationMarker.position = it.toLatLng()
+//                placeOfInterest = PointOfInterest(selectedLocationMarker.position, null, null)
+//
+//                putCameraOn(selectedLocationMarker.position)
+//            }
+//
+//        map.isMyLocationEnabled = true
+//
+//        map.setOnMyLocationButtonClickListener {
+//            resetToCurrentLocation()
+//            true
+//        }
+//
+//        resetToCurrentLocation()
+//    }
+
     private fun putCameraOn(latLng: LatLng) {
-        val cameraPosition = CameraPosition.fromLatLngZoom(latLng, 15f)
+        val cameraPosition = CameraPosition.fromLatLngZoom(latLng, 18f)
         val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
 
         map.animateCamera(cameraUpdate)
