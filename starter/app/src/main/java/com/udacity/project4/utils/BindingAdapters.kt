@@ -2,8 +2,13 @@ package com.udacity.project4.utils
 
 import android.view.View
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.slider.Slider
+import com.udacity.project4.R
 import com.udacity.project4.base.BaseRecyclerViewAdapter
 
 
@@ -43,5 +48,23 @@ object BindingAdapters {
                     view.fadeOut()
             }
         }
+    }
+
+    @InverseBindingAdapter(attribute = "android:value")
+    @JvmStatic
+    fun getSliderValue(slider: Slider) = slider.value
+
+    @BindingAdapter("android:valueAttrChanged")
+    @JvmStatic
+    fun setSliderListeners(slider: Slider, attrChange: InverseBindingListener) {
+        slider.addOnChangeListener { _, _, _ ->
+            attrChange.onChange()
+        }
+    }
+
+    @BindingAdapter("app:radiusButtonIcon")
+    @JvmStatic
+    fun setRadiusButtonIcon(view: ExtendedFloatingActionButton, isOpen: Boolean = false) {
+        view.setIconResource(if (isOpen) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down)
     }
 }

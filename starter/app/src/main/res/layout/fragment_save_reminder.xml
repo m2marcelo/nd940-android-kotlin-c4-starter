@@ -24,8 +24,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/reminder_title_layout"
@@ -35,7 +34,9 @@
                     app:boxCornerRadiusTopStart="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/reminderTitle"
@@ -54,7 +55,8 @@
                     app:boxCornerRadiusTopStart="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/reminder_title_layout">
+                    app:layout_constraintTop_toBottomOf="@id/reminder_title_layout"
+                    android:layout_marginHorizontal="16dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/reminderDescription"
@@ -72,7 +74,8 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
                     android:background="@android:color/darker_gray"
-                    app:layout_constraintTop_toBottomOf="@id/reminder_description_layout" />
+                    app:layout_constraintTop_toBottomOf="@id/reminder_description_layout"
+                    android:layout_marginHorizontal="16dp" />
 
                 <LinearLayout
                     android:id="@+id/select_location_layout"
