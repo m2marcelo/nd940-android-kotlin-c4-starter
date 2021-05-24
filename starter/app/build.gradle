@@ -28,6 +28,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     testOptions.unitTests {
         includeAndroidResources = true
         returnDefaultValues = true
@@ -40,6 +44,24 @@ android {
     buildFeatures {
         dataBinding true
     }
+
+    sourceSets {
+        def sharedTestSourceDir = "$projectDir/src/testShared/java"
+
+        test {
+            java.srcDirs += sharedTestSourceDir
+        }
+
+        androidTest {
+            java.srcDirs += sharedTestSourceDir
+        }
+        main {
+            java {
+                srcDirs 'src/main/java', 'src/testShared', 'src/testShared/java/com/udacity/project4/locationreminders', 'src/testShared/java'
+            }
+        }
+    }
+
 }
 
 dependencies {
