@@ -1,4 +1,4 @@
-package com.udacity.project4.locationreminders.savereminder
+package com.udacity.project4.locationreminders.util
 
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 

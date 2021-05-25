@@ -7,9 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import com.udacity.project4.R
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.data.FakeDataSource
-import com.udacity.project4.locationreminders.util.MainCoroutineRule
-import com.udacity.project4.locationreminders.util.getOrAwaitValue
-import com.udacity.project4.locationreminders.util.getString
+import com.udacity.project4.locationreminders.util.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule

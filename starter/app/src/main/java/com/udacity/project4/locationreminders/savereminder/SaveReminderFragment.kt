@@ -63,8 +63,8 @@ class SaveReminderFragment : BaseFragment() {
             val title = baseViewModel.reminderTitle.value
             val description = baseViewModel.reminderDescription.value
             val poi = baseViewModel.selectedPlaceOfInterest.value
-            val latitude = poi?.latLng?.latitude ?: 0.0
-            val longitude = poi?.latLng?.longitude ?: 0.0
+            val latitude = poi?.latLng?.latitude
+            val longitude = poi?.latLng?.longitude
             val radius = baseViewModel.selectedRadius.value
 
 //            TODO: use the user entered reminder details to:
