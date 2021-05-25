@@ -61,6 +61,9 @@ android {
             }
         }
     }
+    packagingOptions {
+        pickFirst "META-INF/*"
+    }
 
 }
 
