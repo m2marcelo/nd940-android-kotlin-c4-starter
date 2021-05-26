@@ -197,6 +197,14 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun startAtCurrentLocation() {
+        if (!LocationHelper().hasLocationPermissions()) {
+            LocationHelper().requestPermissions {
+                locationPermissionHandler(it, this::startAtCurrentLocation)
+            }
+
+            return
+        }
+
         LocationHelper().startListeningUserLocation( requireContext(), object : LocationHelper.MyLocationListener {
             override fun onLocationChanged(location: Location) {
                 // Here you got user location :)
