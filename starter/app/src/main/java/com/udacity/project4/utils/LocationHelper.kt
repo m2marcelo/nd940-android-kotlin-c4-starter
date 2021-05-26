@@ -44,7 +44,6 @@ class LocationHelper {
             override fun onProviderDisabled(provider: String) {}
         }
 // check for permissions
-        Log.d("Location","check for permissions")
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME.toLong(),LOCATION_REFRESH_DISTANCE.toFloat(), mLocationListener)

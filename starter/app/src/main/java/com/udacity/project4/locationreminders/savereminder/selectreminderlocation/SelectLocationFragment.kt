@@ -158,10 +158,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
             if (it == null) {
                 startAtCurrentLocation()
-                Log.d("LOCATION", "CHAMANDO O STARTATCURRENTLOCATION")
             }
-
-            Log.d("Location","depois do primeiro if " + it?.latLng?.latitude + "," + it?.latLng?.longitude)
         }
 
 
