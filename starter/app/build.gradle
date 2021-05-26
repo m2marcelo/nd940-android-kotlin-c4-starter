@@ -55,11 +55,6 @@ android {
         androidTest {
             java.srcDirs += sharedTestSourceDir
         }
-        main {
-            java {
-                srcDirs 'src/main/java', 'src/testShared', 'src/testShared/java/com/udacity/project4/locationreminders', 'src/testShared/java'
-            }
-        }
     }
     packagingOptions {
         pickFirst "META-INF/*"

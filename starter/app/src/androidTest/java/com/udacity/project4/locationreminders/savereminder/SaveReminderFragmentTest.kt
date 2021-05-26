@@ -106,7 +106,7 @@ class SaveReminderFragmentTest {
 
     @Test
     fun noLocationWillFail() {
-        viewModel.setSelectedRadius(GeofenceConstants.DEFAULT_RADIUS_IN_METRES)
+        viewModel.setSelectedRadius(GeofenceConstants.DEFAULT_RADIUS_IN_METERS)
 
         val navController = mock(NavController::class.java)
         val scenario =
@@ -128,7 +128,7 @@ class SaveReminderFragmentTest {
     fun validDataWillSucceed() {
         val latlng = LatLng(validDataItem.latitude!!, validDataItem.longitude!!)
         viewModel.setSelectedLocation(PointOfInterest(latlng, validDataItem.location, null))
-        viewModel.setSelectedRadius(GeofenceConstants.DEFAULT_RADIUS_IN_METRES)
+        viewModel.setSelectedRadius(GeofenceConstants.DEFAULT_RADIUS_IN_METERS)
 
         val navController = mock(NavController::class.java)
         val scenario =

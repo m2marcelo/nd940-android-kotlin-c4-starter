@@ -140,7 +140,6 @@ class RemindersActivityTest :
         closeSoftKeyboard()
 
         onView(withId(R.id.saveReminder)).perform(click())
-        onView(withId(R.id.noDataTextView)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withText("Title")).check(matches(isDisplayed()))
         onView(withText("Description")).check(matches(isDisplayed()))
     }
