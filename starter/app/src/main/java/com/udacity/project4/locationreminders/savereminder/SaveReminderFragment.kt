@@ -20,6 +20,8 @@ import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
 import com.udacity.project4.locationreminders.geofence.GeofenceConstants
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import com.udacity.project4.utils.LocationHelper
+import com.udacity.project4.utils.PermissionsResultEvent
 import com.udacity.project4.utils.dp
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
@@ -28,6 +30,7 @@ class SaveReminderFragment : BaseFragment() {
     //Get the view model this time as a single to be shared with the another fragment
     override val baseViewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSaveReminderBinding
+    private lateinit var reminderData : ReminderDataItem
 
     //for logging purposes
     companion object {
@@ -70,9 +73,9 @@ class SaveReminderFragment : BaseFragment() {
 //            TODO: use the user entered reminder details to:
 //             1) add a geofencing request
 //             2) save the reminder to the local db
-            val reminderData = ReminderDataItem(title, description, poi?.name, latitude, longitude, radius)
-            if (baseViewModel.validateAndSaveReminder(reminderData)) {
-                addGeofence(reminderData)
+            reminderData = ReminderDataItem(title, description, poi?.name, latitude, longitude, radius)
+            if(baseViewModel.isValidEnteredData(reminderData)) {
+                addGeofence()
             }
         }
     }
@@ -83,8 +86,27 @@ class SaveReminderFragment : BaseFragment() {
         baseViewModel.onClear()
     }
 
+    private fun locationPermissionHandler(event: PermissionsResultEvent, handler: () -> Unit) {
+        if (event.areAllGranted) {
+            handler()
+            return
+        }
+
+        if (event.shouldShowRequestRationale) {
+            baseViewModel.showSnackBar.postValue(getString(R.string.permission_denied_explanation))
+        }
+    }
+
     @SuppressLint("MissingPermission")
-    private fun addGeofence(reminderData: ReminderDataItem) {
+    private fun addGeofence() {
+        if (!LocationHelper().hasLocationPermissions()) {
+            LocationHelper().requestPermissions {
+                locationPermissionHandler(it, this::addGeofence)
+            }
+
+            return
+        }
+
         val geofence = Geofence.Builder()
             .setRequestId(reminderData.id)
             .setCircularRegion(
@@ -113,16 +135,20 @@ class SaveReminderFragment : BaseFragment() {
 
         val client = LocationServices.getGeofencingClient(requireContext())
 
-        client.addGeofences(request, pendingIntent)?.run {
-            addOnSuccessListener {
-                Log.d(TAG, "Added geofence for reminder with id ${reminderData.id} successfully.")
-            }
-            addOnFailureListener {
-                baseViewModel.showErrorMessage.postValue(getString(R.string.error_adding_geofence))
-                it.message?.let { message ->
-                    Log.w(TAG, message)
+        if(isAdded) {
+            client.addGeofences(request, pendingIntent)?.run {
+                addOnSuccessListener {
+                    Log.d(TAG, "Added geofence for reminder with id ${reminderData.id} successfully.")
+                    baseViewModel.validateAndSaveReminder(reminderData)
+                }
+                addOnFailureListener {
+                    baseViewModel.showErrorMessage.postValue(getString(R.string.error_adding_geofence))
+                    it.message?.let { message ->
+                        Log.w(TAG, message)
+                    }
                 }
             }
         }
     }
 }
+
